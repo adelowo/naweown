@@ -2,10 +2,15 @@
 
 namespace Naweown\Http\Controllers\Auth;
 
+use Illuminate\Http\Request;
+use Naweown\Events\AuthenticationLinkWasRequested;
+use Naweown\Events\UserWasCreated;
 use Naweown\User;
 use Validator;
 use Naweown\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Contracts\Events\Dispatcher;
+use Naweown\Notifications\SendAccountActivationLink;
 
 class RegisterController extends Controller
 {
@@ -29,35 +34,37 @@ class RegisterController extends Controller
      */
     protected $redirectTo = '/home';
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    protected $dispatcher;
+
+    public function __construct(Dispatcher $dispatcher)
     {
         $this->middleware('guest');
+        $this->dispatcher = $dispatcher;
     }
 
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
+    public function register(Request $request)
     {
-        return Validator::make($data, [
-            'name' => 'required|max:255',
+        var_dump($request->all());
+
+        $this->validate($request, [
             'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|min:6|confirmed',
+            'moniker' => 'required|string|min:4|max:255|unique:users',
+            "name" => 'required|string|min:4|max:255'
         ]);
+
+        $this->guard()->login($user = $this->create($request->all()));
+
+        $this->dispatcher->fire(new UserWasCreated($user));
+
+        $user->notify(new SendAccountActivationLink($user));
+
+        return redirect(route("home"));
     }
 
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param  array  $data
+     * @param  array $data
      * @return User
      */
     protected function create(array $data)
@@ -65,7 +72,8 @@ class RegisterController extends Controller
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'password' => bcrypt($data['password']),
+            "moniker" => $data['moniker'],
+            "bio" => "Just a local (cfr)art Lover"
         ]);
     }
 }

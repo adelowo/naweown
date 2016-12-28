@@ -20,7 +20,7 @@ class CreateLinksTable extends Migration
 
             $table->string("token");
             
-            $table->timestamp("created_at");    
+            $table->timestamps("created_at");    
         });
     }
 

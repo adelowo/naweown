@@ -12,12 +12,12 @@
 */
 
 $factory->define(Naweown\User::class, function (Faker\Generator $faker) {
-    static $password;
 
     return [
         'name' => $faker->name,
         'email' => $faker->safeEmail,
-        'password' => $password ?: $password = bcrypt('secret'),
+        'bio' => "random shit",
+        'moniker' => $faker->username,
         'remember_token' => str_random(10),
     ];
 });

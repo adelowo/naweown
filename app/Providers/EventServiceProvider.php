@@ -4,6 +4,8 @@ namespace Naweown\Providers;
 
 use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Naweown\Events\AuthenticationLinkWasRequested;
+use Naweown\Events\UserWasCreated;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -13,9 +15,8 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'Naweown\Events\SomeEvent' => [
-            'Naweown\Listeners\EventListener',
-        ],
+        UserWasCreated::class => [],
+        AuthenticationLinkWasRequested::class => []
     ];
 
     /**

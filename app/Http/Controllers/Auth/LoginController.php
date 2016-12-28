@@ -2,6 +2,7 @@
 
 namespace Naweown\Http\Controllers\Auth;
 
+use Illuminate\Http\Request;
 use Naweown\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
@@ -35,5 +36,27 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest', ['except' => 'logout']);
+    }
+
+    public function login(Request $request)
+    {
+        $this->validateLogin($request);
+
+        // If the class is using the ThrottlesLogins trait, we can automatically throttle
+        // the login attempts for this application. We'll key this by the username and
+        // the IP address of the client making these requests into this application.
+        if ($lockedOut = $this->hasTooManyLoginAttempts($request)) {
+            $this->fireLockoutEvent($request);
+
+            return $this->sendLockoutResponse($request);
+        }
+
+    }
+
+    protected function validateLogin(Request $request)
+    {
+        $this->validate($request, [
+           "email" =>  "required|email"
+        ]);
     }
 }

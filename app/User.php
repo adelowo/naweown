@@ -7,6 +7,10 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
+    const EMAIL_VALIDATED = 200;
+
+    const EMAIL_UNVALIDATED = 100;
+
     use Notifiable;
 
     /**
@@ -15,7 +19,10 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name',
+        'email',
+        'moniker',
+        'bio'
     ];
 
     /**
@@ -24,6 +31,19 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
+
+    public function activateAccount()
+    {
+        $this->link()->delete();
+
+        return $this->update(['is_email_activated' => self::EMAIL_VALIDATED]);
+    }
+
+    public function link()
+    {
+        return $this->hasOne(Link::class);
+    }
 }

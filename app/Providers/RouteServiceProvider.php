@@ -4,6 +4,8 @@ namespace Naweown\Providers;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Naweown\Link;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -16,16 +18,18 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected $namespace = 'Naweown\Http\Controllers';
 
-    /**
-     * Define your route model bindings, pattern filters, etc.
-     *
-     * @return void
-     */
     public function boot()
     {
-        //
-
         parent::boot();
+
+        Route::bind("token", function(string $token) {
+
+            if (null === $link = Link::whereToken($token)->first()) {
+                throw new NotFoundHttpException();
+            }
+
+            return $link;
+        });
     }
 
     /**
@@ -35,11 +39,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map()
     {
-        $this->mapApiRoutes();
-
         $this->mapWebRoutes();
-
-        //
     }
 
     /**
