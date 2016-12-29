@@ -16,14 +16,22 @@ class AuthenticationLinkWasRequested
 
     protected $user;
 
-    public function __construct(User $user)
+    protected $shouldRememberUserAfterLoggingIn;
+
+    public function __construct(User $user, bool $shouldRemember = false)
     {
         $this->user = $user;
+        $this->shouldRememberUserAfterLoggingIn = $shouldRemember;
     }
 
     public function getUser() : User
     {
         return $this->user;
+    }
+
+    public function isShouldRememberUserAfterLoggingIn(): bool
+    {
+        return $this->shouldRememberUserAfterLoggingIn;
     }
 
     /**
