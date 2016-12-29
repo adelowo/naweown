@@ -99,4 +99,7 @@ return [
         ],
     ],
 
+    'token' => [
+        'expires_after' => 5 //5 minutes
+    ]
 ];

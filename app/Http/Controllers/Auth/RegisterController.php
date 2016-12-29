@@ -3,6 +3,7 @@
 namespace Naweown\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;
+use Naweown\Events\AccountActivationLinkWasRequested;
 use Naweown\Events\AuthenticationLinkWasRequested;
 use Naweown\Events\UserWasCreated;
 use Naweown\User;
@@ -14,25 +15,10 @@ use Naweown\Notifications\SendAccountActivationLink;
 
 class RegisterController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Register Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users as well as their
-    | validation and creation. By default this controller uses a trait to
-    | provide this functionality without requiring any additional code.
-    |
-    */
 
     use RegistersUsers;
 
-    /**
-     * Where to redirect users after login / registration.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/';
 
     protected $dispatcher;
 
@@ -44,7 +30,6 @@ class RegisterController extends Controller
 
     public function register(Request $request)
     {
-        var_dump($request->all());
 
         $this->validate($request, [
             'email' => 'required|email|max:255|unique:users',
@@ -56,17 +41,11 @@ class RegisterController extends Controller
 
         $this->dispatcher->fire(new UserWasCreated($user));
 
-        $user->notify(new SendAccountActivationLink($user));
+        $this->dispatcher->fire(new AccountActivationLinkWasRequested($user));
 
         return redirect(route("home"));
     }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array $data
-     * @return User
-     */
     protected function create(array $data)
     {
         return User::create([

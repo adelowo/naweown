@@ -7,6 +7,26 @@
 
 $router->get('/', function () {
     return view('welcome');
+})->name('home');
+
+$router->get("login", function () {
+    return "login, asshole";
+})->name("login");
+
+$router->post("login", function () {
+    return "posted";
 });
 
-$router->auth();
+$router->get("register", 'Auth\RegisterController@showRegistrationForm')
+    ->name('register');
+
+$router->post("register", 'Auth\RegisterController@register');
+
+$router->get('account/activate/{token}', 'Auth\AccountActivationController@activate')
+    ->name("activate");
+
+$router->get("logout", 'Auth\LoginController@logout');
+
+$router->get('profile', function (){
+
+})->name('dashboard');
