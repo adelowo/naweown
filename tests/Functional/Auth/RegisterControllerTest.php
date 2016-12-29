@@ -24,6 +24,16 @@ class RegisterControllerTest extends TestCase
         $this->assertResponseOk();
     }
 
+    public function testLoggedInUsersCannotVisitThisPage()
+    {
+        $user = factory(User::class)->make();
+
+        $this->actingAs($user);
+
+        $this->get('register');
+        $this->assertRedirectedTo('/');
+    }
+
     public function testUserCanSuccessfullyRegister()
     {
 
@@ -42,7 +52,6 @@ class RegisterControllerTest extends TestCase
     public function testValidationFailsBecauseOfInvalidValues($value)
     {
         $this->doesntExpectEvents([UserWasCreated::class, AccountActivationLinkWasRequested::class]);
-
 
         $this->post('register', $value);
 
