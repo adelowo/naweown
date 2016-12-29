@@ -2,6 +2,7 @@
 
 namespace Tests\Functional\Auth;
 
+use Naweown\User;
 use Naweown\Events\AuthenticationLinkWasRequested;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
@@ -22,7 +23,7 @@ class LoginControllerTest extends TestCase
 
     public function testALoggedInUserCannotVisitThisPage()
     {
-        $this->actingAs($this->createUser());
+        $this->actingAs($this->modelFactoryFor(User::class));
 
         $this->get('login');
 
@@ -52,7 +53,7 @@ class LoginControllerTest extends TestCase
     {
         $this->expectsEvents(AuthenticationLinkWasRequested::class);
 
-        $user = $this->createUser();
+        $user = $this->modelFactoryFor(User::class);
 
         $this->get('login');
 
@@ -66,7 +67,7 @@ class LoginControllerTest extends TestCase
     {
         $this->expectsEvents(AuthenticationLinkWasRequested::class);
 
-        $user = $this->createUser();
+        $user = $this->modelFactoryFor(User::class);
 
         $this->get('login');
 

@@ -21,7 +21,8 @@ class AccountActivationControllerTest extends TestCase
 
     public function testCannotActivateAnAccountWithAnExpiredToken()
     {
-        $user = $this->createUser();
+
+        $user = $this->modelFactoryFor(User::class);
 
         //Manually set the stage for failure, set the token date to 6 minutes past the current time
         Link::whereUserId(1)
@@ -36,7 +37,7 @@ class AccountActivationControllerTest extends TestCase
 
     public function testAnAccountWasSuccessfullyActivated()
     {
-        $user = $this->createUser();
+        $user = $this->modelFactoryFor(User::class);
 
         $this->actingAs($user);
 
@@ -50,7 +51,7 @@ class AccountActivationControllerTest extends TestCase
 
     public function testAnAccountWasSuccessfullyActivatedEvenIfTheUserIsNotLoggedIn()
     {
-        $user = $this->createUser();
+        $user = $this->modelFactoryFor(User::class);
 
         $this->get("account/activate/{$user->link->token}");
 
@@ -66,8 +67,8 @@ class AccountActivationControllerTest extends TestCase
         //After which we set the `is_email_validated` property to "true"
         //Then a 404 error MUST be thrown since we do not have this token anymore
 
-        $user = $this->createUser();
-        
+        $user = $this->modelFactoryFor(User::class);
+
         $token = $user->link->token;
 
         $user->link()->delete();

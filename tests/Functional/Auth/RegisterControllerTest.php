@@ -26,7 +26,8 @@ class RegisterControllerTest extends TestCase
 
     public function testLoggedInUsersCannotVisitThisPage()
     {
-        $user = factory(User::class)->make();
+
+        $user = $this->modelFactoryFor(User::class, [], 'make');
 
         $this->actingAs($user);
 
