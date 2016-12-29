@@ -2,6 +2,7 @@
 
 namespace Naweown;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -45,5 +46,10 @@ class User extends Authenticatable
     public function link()
     {
         return $this->hasOne(Link::class);
+    }
+
+    public function scopefindByEmailAddress(Builder $builder, string $emailAddress)
+    {
+        return $builder->where('email', $emailAddress)->firstOrFail();
     }
 }

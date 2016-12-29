@@ -9,13 +9,10 @@ $router->get('/', function () {
     return view('welcome');
 })->name('home');
 
-$router->get("login", function () {
-    return "login, asshole";
-})->name("login");
+$router->get("login", 'Auth\LoginController@showLoginForm')
+    ->name("login");
 
-$router->post("login", function () {
-    return "posted";
-});
+$router->post("login", 'Auth\LoginController@login');
 
 $router->get("register", 'Auth\RegisterController@showRegistrationForm')
     ->name('register');

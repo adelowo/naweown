@@ -1,0 +1,35 @@
+<?php
+
+namespace Tests\Unit;
+
+use Naweown\User;
+use Tests\TestCase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
+class UserTest extends TestCase
+{
+
+    use DatabaseMigrations;
+
+    public function testAUserCanBeFoundByEmailAddress()
+    {
+        $createdUser = $this->createUser();
+
+        $user = User::findByEmailAddress($createdUser->email);
+
+        $this->assertEquals($createdUser->email, $user->email);
+    }
+
+    protected function createUser(array $values = [])
+    {
+        return factory(User::class)->create($values);
+    }
+
+    public function testAnExceptionIsThrownWhenTryingToFindAUserByANonExistentEmailAddress()
+    {
+        $this->expectException(ModelNotFoundException::class);
+
+        User::findByEmailAddress("i_love@z.sh");
+    }
+}
