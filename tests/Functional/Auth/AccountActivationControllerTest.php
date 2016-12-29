@@ -62,6 +62,18 @@ class AccountActivationControllerTest extends TestCase
 
     public function testOnlyUnActivatedAccountsCanBeActivated()
     {
+        //Delete the token for this user
+        //After which we set the `is_email_validated` property to "true"
+        //Then a 404 error MUST be thrown since we do not have this token anymore
 
+        $user = $this->createUser();
+        
+        $token = $user->link->token;
+
+        $user->link()->delete();
+        $user->update(['is_email_validated' => User::EMAIL_VALIDATED]);
+
+        $this->get("account/activate/{$token}");
+        $this->assertResponseStatus(404);
     }
 }
