@@ -21,11 +21,6 @@ class UserTest extends TestCase
         $this->assertEquals($createdUser->email, $user->email);
     }
 
-    protected function createUser(array $values = [])
-    {
-        return factory(User::class)->create($values);
-    }
-
     public function testAnExceptionIsThrownWhenTryingToFindAUserByANonExistentEmailAddress()
     {
         $this->expectException(ModelNotFoundException::class);

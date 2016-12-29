@@ -2,6 +2,8 @@
 
 namespace Tests;
 
+use Naweown\User;
+
 abstract class TestCase extends \Illuminate\Foundation\Testing\TestCase
 {
     /**
@@ -18,7 +20,7 @@ abstract class TestCase extends \Illuminate\Foundation\Testing\TestCase
      */
     public function createApplication()
     {
-        $app = require __DIR__.'/../bootstrap/app.php';
+        $app = require __DIR__ . '/../bootstrap/app.php';
 
         $app->make(\Illuminate\Contracts\Console\Kernel::class)->bootstrap();
 
@@ -28,5 +30,10 @@ abstract class TestCase extends \Illuminate\Foundation\Testing\TestCase
     protected function getRouteFor(string $routeName)
     {
         return route($routeName);
+    }
+
+    protected function createUser(array $values = [])
+    {
+        return factory(User::class)->create($values);
     }
 }

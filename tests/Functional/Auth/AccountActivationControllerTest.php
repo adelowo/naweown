@@ -21,7 +21,7 @@ class AccountActivationControllerTest extends TestCase
 
     public function testCannotActivateAnAccountWithAnExpiredToken()
     {
-        $user = factory(User::class)->create();
+        $user = $this->createUser();
 
         //Manually set the stage for failure, set the token date to 6 minutes past the current time
         Link::whereUserId(1)
@@ -36,7 +36,7 @@ class AccountActivationControllerTest extends TestCase
 
     public function testAnAccountWasSuccessfullyActivated()
     {
-        $user = factory(User::class)->create();
+        $user = $this->createUser();
 
         $this->actingAs($user);
 
@@ -50,7 +50,7 @@ class AccountActivationControllerTest extends TestCase
 
     public function testAnAccountWasSuccessfullyActivatedEvenIfTheUserIsNotLoggedIn()
     {
-        $user = factory(User::class)->create();
+        $user = $this->createUser();
 
         $this->get("account/activate/{$user->link->token}");
 
@@ -58,5 +58,10 @@ class AccountActivationControllerTest extends TestCase
         $this->assertSessionMissing('token.expired');
         $this->assertSessionHas('account.activated');
         $this->assertRedirectedToRoute('dashboard');
+    }
+
+    public function testOnlyUnActivatedAccountsCanBeActivated()
+    {
+
     }
 }
