@@ -14,21 +14,23 @@ class AccountActivationController extends Controller
     {
         $redirectRoute = route("dashboard");
 
-        if (carbon()->diffInMinutes($link->created_at) >= config('auth.token.expires_after')) {
+        if (carbon()->diffInMinutes($link->created_at)
+            >= config('auth.token.expires_after')
+        ) {
             return redirect($redirectRoute)
                 ->with(
                     'token.expired',
-                    'This token has expired and has thus been invalidated, please request for another token to activate your account'
+                    'This token has expired and has thus been invalidated.
+                    Please request for another token to activate your account'
                 );
         }
 
-        $user = $link->user;
-        $user->activateAccount();
+        $link->user->activateAccount();
 
         return redirect($redirectRoute)
             ->with(
                 'account.activated',
-                "Hi, {$user->moniker}, your email address has been verified"
+                "Your email address has been verified"
             );
     }
 }

@@ -22,7 +22,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         parent::boot();
 
-        Route::bind("token", function(string $token) {
+        Route::bind("token", function (string $token) {
 
             if (null === $link = Link::whereToken($token)->first()) {
                 throw new NotFoundHttpException();
