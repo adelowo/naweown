@@ -2,6 +2,7 @@
 
 namespace Naweown\Http\Controllers\Auth;
 
+use Illuminate\Auth\AuthManager;
 use Illuminate\Http\Request;
 use Naweown\Events\AuthenticationLinkWasRequested;
 use Naweown\Http\Controllers\Controller;
@@ -55,8 +56,32 @@ class LoginController extends Controller
         return $this->incrementLoginAttempts($request);
     }
 
-    public function login(Request $request, Token $link)
-    {
+    public function login(
+        Request $request,
+        AuthManager $authManager,
+        Token $token
+    ) {
 
+        if ($token->isExpired()) {
+            $token->delete();
+
+            return redirect(route("login"))
+                ->with('token.expired', true);
+        }
+
+
+        $shouldRemember = (bool)$request->query('remember', 0);
+
+        $authManager->guard()->login($token->user, $shouldRemember);
+
+        return $this->sendLoginResponse($request);
+    }
+
+    protected function sendLoginResponse(Request $request)
+    {
+        $request->session()->regenerate();
+        $this->clearLoginAttempts($request);
+
+        return redirect()->intended();
     }
 }

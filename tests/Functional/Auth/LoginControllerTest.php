@@ -2,6 +2,8 @@
 
 namespace Tests\Functional\Auth;
 
+use Illuminate\Auth\Events\Login;
+use Naweown\Token;
 use Naweown\User;
 use Naweown\Events\AuthenticationLinkWasRequested;
 use Tests\TestCase;
@@ -77,11 +79,41 @@ class LoginControllerTest extends TestCase
 
         //Manually visit this page again.
         //If logged in, should redirect you to the profile page or something
+        //else you would still be able to use this page.
 
         $this->get('login');
         $this->assertResponseOk();
     }
 
+
+    public function testUserIsLoggedInSuccessfully()
+    {
+        $this->expectsEvents(Login::class);
+
+        $user = $this->modelFactoryFor(User::class);
+
+        $token = $user->token;
+
+        $this->get("login/{$token->token}");
+
+        $this->assertRedirectedTo('/');
+
+        $this->assertEquals($user->moniker, $this->app['auth']->guard()->user()->moniker);
+    }
+
+    public function testUserCannotLoginBecauseOfAnExpiredToken()
+    {
+        $user = $this->modelFactoryFor(User::class);
+
+        Token::whereUserId($user->id)
+            ->update(['created_at' => \Naweown\carbon()->subMinutes(5)]);
+
+
+        $this->get("login/{$user->token->token}");
+
+        $this->assertRedirectedTo("login");
+        $this->assertSessionHas("token.expired");
+    }
 
     public function getInvalidValues()
     {

@@ -9,7 +9,8 @@ class Token extends Model
 {
     protected $fillable = [
         'user_id',
-        'token'
+        'token',
+        'created_at'
     ];
 
     public function user()
@@ -17,6 +18,9 @@ class Token extends Model
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Model
+     */
     public function scopeFindByToken(Builder $builder, string $token)
     {
         return $builder->where('token', $token)->firstOrFail();

@@ -12,7 +12,10 @@ $router->get('/', function () {
 $router->get("login", 'Auth\LoginController@showLoginForm')
     ->name("login");
 
-$router->post("login", 'Auth\LoginController@login');
+$router->post("login", 'Auth\LoginController@postlogin');
+
+$router->get("login/{token}", 'Auth\LoginController@login')
+    ->name('login.token');
 
 $router->get("register", 'Auth\RegisterController@showRegistrationForm')
     ->name('register');

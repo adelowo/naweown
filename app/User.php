@@ -38,14 +38,14 @@ class User extends Authenticatable
 
     public function activateAccount()
     {
-        $this->link()->delete();
+        $this->token()->delete();
 
         return $this->update(['is_email_activated' => self::EMAIL_VALIDATED]);
     }
 
-    public function link()
+    public function token()
     {
-        return $this->hasOne(Link::class);
+        return $this->hasOne(Token::class);
     }
 
     public function scopefindByEmailAddress(Builder $builder, string $emailAddress)
