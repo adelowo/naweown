@@ -15,6 +15,8 @@ class AccountActivationController extends Controller
         $redirectRoute = route("dashboard");
 
         if ($token->isExpired()) {
+            $token->delete();
+
             return redirect($redirectRoute)
                 ->with(
                     'token.expired',

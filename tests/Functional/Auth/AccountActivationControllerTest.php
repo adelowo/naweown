@@ -35,6 +35,20 @@ class AccountActivationControllerTest extends TestCase
         $this->assertRedirectedToRoute('dashboard');
     }
 
+    public function testExpiredTokensAreAutoDeletedWhenUsed()
+    {
+        $user = $this->modelFactoryFor(User::class);
+
+        $token = $user->token->token;
+
+        Token::findByToken($token)
+            ->update(['created_at' => carbon()->subMinutes(5)]);
+
+        $this->get("account/activate/{$token}");
+
+        $this->dontSeeInDatabase('tokens', ['token' => $token]);
+    }
+
     public function testAnAccountWasSuccessfullyActivated()
     {
         $user = $this->modelFactoryFor(User::class);
