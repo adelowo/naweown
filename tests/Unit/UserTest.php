@@ -14,7 +14,7 @@ class UserTest extends TestCase
 
     public function testAUserCanBeFoundByEmailAddress()
     {
-        $createdUser = $this->createUser();
+        $createdUser = $this->modelFactoryFor(User::class);
 
         $user = User::findByEmailAddress($createdUser->email);
 

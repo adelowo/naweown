@@ -31,7 +31,7 @@ abstract class TestCase extends \Illuminate\Foundation\Testing\TestCase
     {
         return route($routeName);
     }
-    
+
     protected function modelFactoryFor(string $class, array $values = [], string $action = 'create')
     {
         return factory($class)->$action($values);

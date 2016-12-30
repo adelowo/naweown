@@ -6,7 +6,7 @@ use Illuminate\Foundation\Application;
 use Naweown\Services\TokenGenerator;
 use Naweown\Services\TokenGeneratorInterface;
 use Illuminate\Support\ServiceProvider;
-use Naweown\Link;
+use Naweown\Token;
 use Naweown\User;
 
 class AppServiceProvider extends ServiceProvider
@@ -16,11 +16,8 @@ class AppServiceProvider extends ServiceProvider
     {
 
         User::created(function (User $user) use ($tokenGenerator) {
-
-            $link = new Link(['token' => $tokenGenerator->generate()]);
-
-            $user->link()->save($link);
-
+            $token = new Token(['token' => $tokenGenerator->generate()]);
+            $user->token()->save($token);
         });
 
     }

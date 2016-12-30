@@ -7,6 +7,7 @@ use Naweown\Events\AuthenticationLinkWasRequested;
 use Naweown\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Contracts\Events\Dispatcher;
+use Naweown\Token;
 use Naweown\User;
 
 class LoginController extends Controller
@@ -22,7 +23,7 @@ class LoginController extends Controller
         $this->eventDispatcher = $dispatcher;
     }
 
-    public function login(Request $request)
+    public function postlogin(Request $request)
     {
 
         $this->validate($request, [
@@ -52,5 +53,10 @@ class LoginController extends Controller
         }
 
         return $this->incrementLoginAttempts($request);
+    }
+
+    public function login(Request $request, Token $link)
+    {
+
     }
 }

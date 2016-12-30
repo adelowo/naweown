@@ -82,6 +82,7 @@ class LoginControllerTest extends TestCase
         $this->assertResponseOk();
     }
 
+
     public function getInvalidValues()
     {
         return [

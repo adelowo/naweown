@@ -4,7 +4,7 @@ namespace Naweown\Providers;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
-use Naweown\Link;
+use Naweown\Token;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class RouteServiceProvider extends ServiceProvider
@@ -24,7 +24,7 @@ class RouteServiceProvider extends ServiceProvider
 
         Route::bind("token", function (string $token) {
 
-            if (null === $link = Link::whereToken($token)->first()) {
+            if (null === $link = Token::whereToken($token)->first()) {
                 throw new NotFoundHttpException();
             }
 

@@ -2,7 +2,7 @@
 
 namespace Tests\Functional\Auth;
 
-use Naweown\Link;
+use Naweown\Token;
 use Naweown\User;
 use Tests\TestCase;
 use function Naweown\carbon;
@@ -25,10 +25,10 @@ class AccountActivationControllerTest extends TestCase
         $user = $this->modelFactoryFor(User::class);
 
         //Manually set the stage for failure, set the token date to 6 minutes past the current time
-        Link::whereUserId(1)
+        Token::whereUserId(1)
             ->update(['created_at' => carbon()->subMinutes(6)]);
 
-        $this->get("account/activate/{$user->link->token}");
+        $this->get("account/activate/{$user->token->token}");
 
         $this->assertSessionHas('token.expired');
 
@@ -41,9 +41,9 @@ class AccountActivationControllerTest extends TestCase
 
         $this->actingAs($user);
 
-        $this->get("account/activate/{$user->link->token}");
+        $this->get("account/activate/{$user->token->token}");
 
-        $this->dontSeeInDatabase('links', ['user_id' => 1]);
+        $this->dontSeeInDatabase('tokens', ['user_id' => 1]);
         $this->assertSessionMissing('token.expired');
         $this->assertSessionHas('account.activated');
         $this->assertRedirectedToRoute('dashboard');
@@ -53,9 +53,9 @@ class AccountActivationControllerTest extends TestCase
     {
         $user = $this->modelFactoryFor(User::class);
 
-        $this->get("account/activate/{$user->link->token}");
+        $this->get("account/activate/{$user->token->token}");
 
-        $this->dontSeeInDatabase('links', ['user_id' => 1]);
+        $this->dontSeeInDatabase('tokens', ['user_id' => 1]);
         $this->assertSessionMissing('token.expired');
         $this->assertSessionHas('account.activated');
         $this->assertRedirectedToRoute('dashboard');
@@ -69,9 +69,9 @@ class AccountActivationControllerTest extends TestCase
 
         $user = $this->modelFactoryFor(User::class);
 
-        $token = $user->link->token;
+        $token = $user->token->token;
 
-        $user->link()->delete();
+        $user->token()->delete();
         $user->update(['is_email_validated' => User::EMAIL_VALIDATED]);
 
         $this->get("account/activate/{$token}");

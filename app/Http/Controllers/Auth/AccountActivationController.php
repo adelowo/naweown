@@ -4,19 +4,17 @@ namespace Naweown\Http\Controllers\Auth;
 
 use Naweown\Http\Requests;
 use Naweown\Http\Controllers\Controller;
-use Naweown\Link;
+use Naweown\Token;
 use function Naweown\carbon;
 
 class AccountActivationController extends Controller
 {
 
-    public function activate(Link $link)
+    public function activate(Token $token)
     {
         $redirectRoute = route("dashboard");
 
-        if (carbon()->diffInMinutes($link->created_at)
-            >= config('auth.token.expires_after')
-        ) {
+        if ($token->isExpired()) {
             return redirect($redirectRoute)
                 ->with(
                     'token.expired',
@@ -25,7 +23,7 @@ class AccountActivationController extends Controller
                 );
         }
 
-        $link->user->activateAccount();
+        $token->user->activateAccount();
 
         return redirect($redirectRoute)
             ->with(
