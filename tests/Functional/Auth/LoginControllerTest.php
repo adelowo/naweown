@@ -23,7 +23,7 @@ class LoginControllerTest extends TestCase
         $this->assertResponseOk();
     }
 
-    public function testALoggedInUserCannotVisitThisPage()
+    public function testALoggedInUserCannotVisitTheLoginPage()
     {
         $this->actingAs($this->modelFactoryFor(User::class));
 
@@ -85,7 +85,6 @@ class LoginControllerTest extends TestCase
         $this->assertResponseOk();
     }
 
-
     public function testUserIsLoggedInSuccessfully()
     {
         $this->expectsEvents(Login::class);
@@ -99,6 +98,9 @@ class LoginControllerTest extends TestCase
         $this->assertRedirectedTo('/');
 
         $this->assertEquals($user->moniker, $this->app['auth']->guard()->user()->moniker);
+
+        //Make sure this token cannot be reused.
+        $this->dontSeeInDatabase("tokens", ["token" => $token->token ]);
     }
 
     public function testUserCannotLoginBecauseOfAnExpiredToken()

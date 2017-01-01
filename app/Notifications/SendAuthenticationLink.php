@@ -8,53 +8,33 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Naweown\User;
 
-class SendAuthenticationLink extends Notification
+class SendAuthenticationLink extends Notification implements ShouldQueue
 {
     use Queueable;
 
     protected $user;
 
-    public function __construct(User $user)
+    protected $link;
+
+    public function __construct(User $user, string $link)
     {
         $this->user = $user;
+        $this->link;
     }
 
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @param  mixed $notifiable
-     * @return array
-     */
     public function via($notifiable)
     {
         return ['mail'];
     }
 
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
-            ->subject()
-            ->line('The introduction to the notification.')
-            ->action('Click to ', 'https://laravel.com')
-            ->line('Thank you for using Naweown!');
-    }
+        $name = $this->user->name;
 
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed $notifiable
-     * @return array
-     */
-    public function toArray($notifiable)
-    {
-        return [
-            //
-        ];
+        return (new MailMessage)
+            ->subject("Here is your magic link to login")
+            ->line("Hello,{$name}, You requested for a login link some seconds ago")
+            ->action('Click to login', $this->link)
+            ->line('Thank you for using Naweown!');
     }
 }

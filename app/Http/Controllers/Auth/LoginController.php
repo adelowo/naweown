@@ -74,6 +74,8 @@ class LoginController extends Controller
 
         $authManager->guard()->login($token->user, $shouldRemember);
 
+        $request->user()->token()->delete();
+
         return $this->sendLoginResponse($request);
     }
 

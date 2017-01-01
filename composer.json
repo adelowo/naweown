@@ -1,7 +1,7 @@
 {
-  "name": "adelowo/Naweown",
+  "name": "adelowo/naweown",
   "description": "POC",
-  "license": "proprietary",
+  "license": "MIT",
   "type": "project",
   "require": {
     "php": ">=7.0",
@@ -12,7 +12,8 @@
     "mockery/mockery": "0.9.*",
     "phpunit/phpunit": "~5.0",
     "symfony/css-selector": "3.1.*",
-    "symfony/dom-crawler": "3.1.*"
+    "symfony/dom-crawler": "3.1.*",
+    "doctrine/dbal": "^2.5"
   },
   "authors": [
     {
@@ -35,7 +36,7 @@
       "tests/TestCase.php"
     ],
     "psr-4": {
-      "Tests\\" : "tests/"
+      "Tests\\": "tests/"
     },
     "files": [
       "app/functions.php"

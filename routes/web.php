@@ -25,7 +25,8 @@ $router->post("register", 'Auth\RegisterController@register');
 $router->get('account/activate/{token}', 'Auth\AccountActivationController@activate')
     ->name("activate");
 
-$router->get("logout", 'Auth\LoginController@logout');
+$router->get("logout", 'Auth\LoginController@logout')
+    ->name("logout");
 
 $router->get('profile', function (){
 
