@@ -27,4 +27,22 @@ class UserTest extends TestCase
 
         User::findByEmailAddress("i_love@z.sh");
     }
+
+    public function testUserAccountActivationStatus()
+    {
+        $createdUser = $this->modelFactoryFor(User::class);
+
+        $createdUser->update([
+            'is_email_validated' => User::EMAIL_VALIDATED
+        ]);
+
+        $this->assertTrue($createdUser->isAccountActivated());
+    }
+
+    public function testUserAccountActivationStatusIsInTheNegative()
+    {
+        $createdUser = $this->modelFactoryFor(User::class);
+
+        $this->assertFalse($createdUser->isAccountActivated());
+    }
 }
