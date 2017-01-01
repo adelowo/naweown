@@ -26,7 +26,7 @@ class SendAccountActivationLink extends Notification implements ShouldQueue
 
     public function toMail($notifiable)
     {
-        $token = $this->user->link->token;
+        $token = $this->user->token->token;
         $uri = route('activate', $token);
 
         return (new MailMessage)

@@ -43,6 +43,10 @@ class RegisterController extends Controller
 
         $this->dispatcher->fire(new AccountActivationLinkWasRequested($user));
 
+        $user->notify(
+            new SendAccountActivationLink($user)
+        );
+
         return redirect(route("home"));
     }
 

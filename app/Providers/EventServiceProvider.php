@@ -17,10 +17,9 @@ class EventServiceProvider extends ServiceProvider
 
         ],
         AuthenticationLinkWasRequested::class => [
-        ],
-        AccountActivationLinkWasRequested::class => [
             SendAuthenticationLink::class
-        ]
+        ],
+        AccountActivationLinkWasRequested::class => []
     ];
 
     public function boot()

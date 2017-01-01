@@ -28,6 +28,6 @@ $router->get('account/activate/{token}', 'Auth\AccountActivationController@activ
 $router->get("logout", 'Auth\LoginController@logout')
     ->name("logout");
 
-$router->get('profile', function (){
+$router->get('profile', function () {
 
 })->name('dashboard');
