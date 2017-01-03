@@ -3,6 +3,7 @@
 namespace Naweown\Providers;
 
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Validator;
 use Naweown\Services\TokenGenerator;
 use Naweown\Services\TokenGeneratorInterface;
 use Illuminate\Support\ServiceProvider;
@@ -20,6 +21,11 @@ class AppServiceProvider extends ServiceProvider
             $user->token()->save($token);
         });
 
+        Validator::extend(
+            'slug',
+            function (string $attribute, string $value, array $parameters, $validator) {
+                return (bool) preg_match('/-/', $value);
+            });
     }
 
     /**
