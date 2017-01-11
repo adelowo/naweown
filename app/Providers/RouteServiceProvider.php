@@ -2,6 +2,7 @@
 
 namespace Naweown\Providers;
 
+use Naweown\Item;
 use Naweown\Token;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -17,6 +18,10 @@ class RouteServiceProvider extends ServiceProvider
 
         Route::bind("token", function (string $token) {
             return Token::findByToken($token);
+        });
+
+        Route::bind("id", function (int $id) {
+           return Item::findOrFail($id);
         });
     }
 

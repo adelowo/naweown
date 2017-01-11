@@ -3,6 +3,7 @@
 namespace Naweown\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Naweown\Http\Middleware\CanEditPost;
 
 class Kernel extends HttpKernel
 {
@@ -52,5 +53,6 @@ class Kernel extends HttpKernel
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \Naweown\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'item_owner' => CanEditPost::class
     ];
 }

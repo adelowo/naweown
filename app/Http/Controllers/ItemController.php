@@ -3,6 +3,7 @@
 namespace Naweown\Http\Controllers;
 
 use Naweown\Http\Requests\CreateItemRequest;
+use Naweown\Http\Requests\UpdateItemRequest;
 use Naweown\Item;
 
 class ItemController extends Controller
@@ -14,6 +15,10 @@ class ItemController extends Controller
             'auth',
             ['except' => ['index', 'show']]
         );
+
+        $this->middleware('item_owner', [
+            'only' => ['edit', 'update']
+        ]);
     }
 
     public function index()
@@ -57,7 +62,7 @@ class ItemController extends Controller
     {
         $files = [];
 
-        for ($i = 0; $i <= 5; $i++) {
+        for ($i = 0; $i < 5; $i++) {
             if ($itemRequest->hasFile('images.' . $i)) {
                 $files[] = $itemRequest->file('images.' . $i)
                     ->store('items');
@@ -73,18 +78,51 @@ class ItemController extends Controller
         return view('items.show', ['item' => Item::findOrFail($id)]);
     }
 
-    public function edit($id)
+    public function edit(Item $item)
     {
-        //
+        return view('items.edit', ['item' => $item]);
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateItemRequest $updateItemRequest, Item $item)
     {
-        //
+        $item->update([
+            'slug' => $updateItemRequest->input('slug'),
+            'description' => $updateItemRequest->input('description'),
+            'title' => $updateItemRequest->input('title'),
+            'images' => $this->getUpdatedFilePaths($updateItemRequest, $item)
+        ]);
+
+        return redirect()
+            ->to(route('items.show', $item->id))
+            ->with('item.updated', true);
     }
 
-    public function destroy($id)
+    protected function getUpdatedFilePaths(UpdateItemRequest $updateItemRequest, Item $item)
     {
-        //
+        $files = [];
+
+        $store = function (int $i) use ($updateItemRequest) {
+            return $updateItemRequest->file('images.' . $i)
+                ->store('items');
+        };
+
+        for ($i = 0; $i < 5; $i++) {
+            if ($updateItemRequest->hasFile('images.' . $i)) {
+                $files[] = $store($i);
+            } else {
+                $files[] = $item->images[$i];
+            }
+        }
+
+        return $files;
+    }
+
+    public function destroy(Item $item)
+    {
+        $item->delete();
+
+        return redirect()
+            ->to('profile')
+            ->with('item.deleted', true);
     }
 }
