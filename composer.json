@@ -1,7 +1,7 @@
 {
-  "name": "adelowo/naweown",
+  "name": "adelowo/Naweown",
   "description": "POC",
-  "license": "MIT",
+  "license": "proprietary",
   "type": "project",
   "require": {
     "php": ">=7.0",
@@ -29,6 +29,16 @@
     ],
     "psr-4": {
       "Naweown\\": "app/"
+    },
+    "psr-0": {
+      "Doctrine\\DBAL\\": "vendor/doctrine/dbal",
+      "Doctrine\\Common\\": "vendor/doctrine/common",
+      "Doctrine\\Common\\Collections\\": "vendor/doctrine/collections",
+      "Doctrine\\Common\\Inflector\\": "vendor/doctrine/inflector",
+      "Doctrine\\Instantiator\\" : "vendor/doctrine/instantiator",
+      "Doctrine\\Common\\Lexer\\" : "vendor/doctrine/lexer",
+      "Doctrine\\Common\\Cache\\" : "vendor/doctrine/cache",
+      "Doctrine\\Common\\Annotations\\" : "vendor/doctrine/annotations"
     }
   },
   "autoload-dev": {

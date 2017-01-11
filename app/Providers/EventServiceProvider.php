@@ -2,6 +2,7 @@
 
 namespace Naweown\Providers;
 
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Naweown\Events\AccountActivationLinkWasRequested;

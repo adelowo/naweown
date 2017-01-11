@@ -49,6 +49,11 @@ class User extends Authenticatable
         return $this->hasOne(Token::class);
     }
 
+    public function item()
+    {
+        return $this->hasMany(Item::class);
+    }
+
     public function scopefindByEmailAddress(Builder $builder, string $emailAddress)
     {
         return $builder->where('email', $emailAddress)->firstOrFail();

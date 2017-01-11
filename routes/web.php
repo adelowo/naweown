@@ -28,6 +28,8 @@ $router->get('account/activate/{token}', 'Auth\AccountActivationController@activ
 $router->get("logout", 'Auth\LoginController@logout')
     ->name("logout");
 
-$router->get('profile', function () {
-
+$router->get('profile', function (\Illuminate\Http\Request $request) {
+    var_dump($request->user());
 })->name('dashboard');
+
+$router->resource('items', 'ItemController');

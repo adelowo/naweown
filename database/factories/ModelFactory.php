@@ -19,5 +19,6 @@ $factory->define(Naweown\User::class, function (Faker\Generator $faker) {
         'bio' => "random shit",
         'moniker' => $faker->username,
         'remember_token' => str_random(10),
+        'is_email_validated' => \Naweown\User::EMAIL_UNVALIDATED
     ];
 });

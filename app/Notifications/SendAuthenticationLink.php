@@ -19,7 +19,7 @@ class SendAuthenticationLink extends Notification implements ShouldQueue
     public function __construct(User $user, string $link)
     {
         $this->user = $user;
-        $this->link;
+        $this->link = $link;
     }
 
     public function via($notifiable)
