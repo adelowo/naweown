@@ -115,7 +115,9 @@ class ItemController extends Controller
             if ($updateItemRequest->hasFile('images.' . $i)) {
                 $files[] = $store($i);
             } else {
-                $files[] = $item->images[$i];
+                if (isset($item->images[$i])) {
+                    $files[] = $item->images[$i];
+                }
             }
         }
 
