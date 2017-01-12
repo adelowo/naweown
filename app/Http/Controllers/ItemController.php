@@ -2,6 +2,8 @@
 
 namespace Naweown\Http\Controllers;
 
+use Illuminate\Contracts\Events\Dispatcher;
+use Naweown\Events\ItemWasViewed;
 use Naweown\Http\Requests\CreateItemRequest;
 use Naweown\Http\Requests\UpdateItemRequest;
 use Naweown\Item;
@@ -72,10 +74,13 @@ class ItemController extends Controller
         return $files;
     }
 
-    public function show($id)
-    {
+    public function show(
+        Item $item,
+        Dispatcher $dispatcher
+    ) {
+        $dispatcher->fire(new ItemWasViewed($item));
 
-        return view('items.show', ['item' => Item::findOrFail($id)]);
+        return view('items.show', ['item' => $item]);
     }
 
     public function edit(Item $item)

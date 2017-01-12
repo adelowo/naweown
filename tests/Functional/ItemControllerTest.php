@@ -97,4 +97,10 @@ class ItemControllerTest extends TestCase
         //Take a look at the previous test
         $this->markTestSkipped();
     }
+
+    public function testAnItemViewCountIsIncrementedOnEveryPageLoad()
+    {
+        //Take a look at the previous test..
+        $this->markTestSkipped();
+    }
 }

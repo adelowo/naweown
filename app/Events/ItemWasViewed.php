@@ -8,21 +8,21 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Naweown\User;
+use Naweown\Item;
 
-class UserWasCreated
+class ItemWasViewed
 {
     use InteractsWithSockets, SerializesModels;
 
-    protected $user;
+    protected $item;
 
-    public function __construct(User $user)
+    public function __construct(Item $item)
     {
-        $this->user = $user;
+        $this->item = $item;
     }
 
-    public function getUser() : User
+    public function getItem() : Item
     {
-        return $this->user;
+        return $this->item;
     }
 }
