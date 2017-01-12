@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Naweown\Events\AccountActivationLinkWasRequested;
 use Naweown\Events\AuthenticationLinkWasRequested;
+use Naweown\Events\ItemWasViewed;
 use Naweown\Events\UserWasCreated;
+use Naweown\Listeners\IncrementItemViewCount;
 use Naweown\Listeners\SendAuthenticationLink;
 
 class EventServiceProvider extends ServiceProvider
@@ -20,7 +22,10 @@ class EventServiceProvider extends ServiceProvider
         AuthenticationLinkWasRequested::class => [
             SendAuthenticationLink::class
         ],
-        AccountActivationLinkWasRequested::class => []
+        AccountActivationLinkWasRequested::class => [],
+        ItemWasViewed::class => [
+            IncrementItemViewCount::class
+        ]
     ];
 
     public function boot()

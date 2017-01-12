@@ -21,7 +21,7 @@ class RouteServiceProvider extends ServiceProvider
         });
 
         Route::bind("id", function (int $id) {
-           return Item::findOrFail($id);
+            return Item::findOrFail($id);
         });
     }
 

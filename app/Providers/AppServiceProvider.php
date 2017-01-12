@@ -24,8 +24,9 @@ class AppServiceProvider extends ServiceProvider
         Validator::extend(
             'slug',
             function (string $attribute, string $value, array $parameters, $validator) {
-                return (bool) preg_match('/-/', $value);
-            });
+                return (bool)preg_match('/-/', $value);
+            }
+        );
     }
 
     /**
