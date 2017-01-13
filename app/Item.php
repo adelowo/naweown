@@ -16,6 +16,7 @@ class Item extends Model
 
     protected $casts = [
         'images' => 'array',
-        'user_id' => 'int'
+        'user_id' => 'int',
+        'number_of_views' => 'int'
     ];
 }

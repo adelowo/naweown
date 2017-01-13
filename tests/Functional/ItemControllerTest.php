@@ -2,7 +2,6 @@
 
 namespace Tests\Functional;
 
-use Faker\Generator;
 use Naweown\Item;
 use Naweown\User;
 use Tests\TestCase;
@@ -145,10 +144,5 @@ class ItemControllerTest extends TestCase
 
         $this->seeInDatabase('items', ['title' => $this->getValidData()['title']]);
         $this->dontSeeInDatabase('items', ['title' => $item->title]);
-    }
-
-    public function testAnItemViewCountIsIncrementedOnEveryPageLoad()
-    {
-        $this->markTestSkipped();
     }
 }
