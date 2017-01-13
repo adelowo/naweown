@@ -2,6 +2,7 @@
 
 namespace Naweown\Providers;
 
+use Naweown\Category;
 use Naweown\Item;
 use Naweown\Token;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +23,10 @@ class RouteServiceProvider extends ServiceProvider
 
         Route::bind("id", function (int $id) {
             return Item::findOrFail($id);
+        });
+
+        Route::bind("category", function(string $cat){
+           return Category::whereSlug($cat)->firstOrFail();
         });
     }
 

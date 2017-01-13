@@ -33,3 +33,9 @@ $router->get('profile', function (\Illuminate\Http\Request $request) {
 })->name('dashboard');
 
 $router->resource('items', 'ItemController');
+
+$router->resource('category', 'CategoryController', ['only' => ['index', 'show']]);
+
+$router->get('tags', 'TagController@index');
+
+
