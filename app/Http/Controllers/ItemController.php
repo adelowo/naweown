@@ -19,7 +19,7 @@ class ItemController extends Controller
         );
 
         $this->middleware('item_owner', [
-            'only' => ['edit', 'update']
+            'only' => ['edit', 'update', 'destroy']
         ]);
     }
 

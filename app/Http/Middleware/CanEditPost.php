@@ -12,7 +12,7 @@ class CanEditPost
     {
         $item = Item::find($request->segment(2));
 
-        abort_if($request->user()->id !== $item->user_id, 404);
+        abort_if($request->user()->id !== $item->user_id, 403);
 
         return $next($request);
     }

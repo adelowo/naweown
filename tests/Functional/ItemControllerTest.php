@@ -80,27 +80,75 @@ class ItemControllerTest extends TestCase
     public function testItemCanOnlyBeModifiedByItsCreator()
     {
         //Modification here refers to deletions and updates
-        
-        /**
-         * TODO : Write this
-         * In the `save` method of models, the model is returned which then leads to it's attribute casting.
-         * So whenever i do $item->save(), the world drops because Sqlite doesn't have a native json table.
-         * PROBABLE FIXES => Override DBAL's "DATA TYPES" for the sqlite platform
-         *                   Switch to MYSQL for tests (fuck this slow tests anyways!!!)
-         */
 
-        $this->markTestSkipped();
+        $itemOwner = $this->modelFactoryFor(User::class);
+
+        $item = $this->saveItem($itemOwner);
+
+        $troll = $this->modelFactoryFor(User::class);
+
+        $troll->activateAccount();
+
+        $this->be($troll);
+
+        $id = $item->id;
+
+        $this->get("items/{$id}/edit");
+        $this->assertResponseStatus(403);
+
+        $this->put("items/{$id}", $this->getValidData());
+        $this->assertResponseStatus(403);
+        //make sure nothing gets updated
+        $this->seeInDatabase('items', ['id' => $id, 'slug' => $item->slug]);
+
+        $this->delete("items/{$id}");
+        $this->assertResponseStatus(403);
+        //make sure nothing was deleted
+        $this->seeInDatabase('items', ['id' => $id]);
+    }
+
+    protected function saveItem(User $user)
+    {
+        $images = json_encode([
+            "items/231bb5b1bcfb7ab57252f6abfacfaef4.jpeg",
+            "pics/12c8b198aed6c43c0a7465b22132afb4.jpeg",
+            "pics/45bbb2268dbfa0623a9409fd54b76b3a.jpeg",
+            "items/bfe68e719921664602dd950e458d5243.jpeg",
+        ]);
+
+        $model = new Item([
+            'title' => "The return of the Jedi",
+            'slug' => "jedis-resurrection",
+            'description' => "Darth Vader is dead. Long live Luke SkyWalker",
+            'images' => $images
+        ]);
+
+        $user->item()->save($model);
+
+        return $model;
     }
 
     public function testItemCanBeUpdated()
     {
-        //Take a look at the previous test
-        $this->markTestSkipped();
+        $user = $this->modelFactoryFor(User::class);
+
+        $item = $this->saveItem($user);
+
+        $user->activateAccount();
+
+        $this->be($user);
+
+        $this->put("items/{$item->id}", $this->getValidData());
+
+        $this->assertRedirectedTo("items/{$item->id}");
+        $this->assertResponseStatus(302);
+
+        $this->seeInDatabase('items', ['title' => $this->getValidData()['title']]);
+        $this->dontSeeInDatabase('items', ['title' => $item->title]);
     }
 
     public function testAnItemViewCountIsIncrementedOnEveryPageLoad()
     {
-        //Take a look at the previous test..
         $this->markTestSkipped();
     }
 }
