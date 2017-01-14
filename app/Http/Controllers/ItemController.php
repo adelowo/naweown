@@ -3,6 +3,8 @@
 namespace Naweown\Http\Controllers;
 
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Naweown\Category;
 use Naweown\Events\ItemWasViewed;
 use Naweown\Http\Requests\CreateItemRequest;
 use Naweown\Http\Requests\UpdateItemRequest;
@@ -49,6 +51,7 @@ class ItemController extends Controller
             'title' => $itemRequest->input('title'),
             'slug' => $slug,
             'images' => $files,
+            'cats' => $this->getCategories($itemRequest),
             'description' => $itemRequest->input('description')
         ]);
 
@@ -74,6 +77,23 @@ class ItemController extends Controller
         return $files;
     }
 
+    protected function getCategories(CreateItemRequest $createItemRequest)
+    {
+        $cats = '';
+
+        foreach (explode(",", $createItemRequest->input('cats')) as $cat) {
+            try {
+                //If the category exists, make use of it. Else discard it.
+                Category::findBySlug($cat);
+                $cats .= ','.$cat.',';
+            } catch (ModelNotFoundException $e) {
+                //Whoosh
+            }
+        }
+
+        return preg_replace('/(^,{0,}|,{0,}$)/', '', $cats);
+    }
+
     public function show(
         Item $item,
         Dispatcher $dispatcher
@@ -94,7 +114,8 @@ class ItemController extends Controller
             'slug' => $updateItemRequest->input('slug'),
             'description' => $updateItemRequest->input('description'),
             'title' => $updateItemRequest->input('title'),
-            'images' => $this->getUpdatedFilePaths($updateItemRequest, $item)
+            'images' => $this->getUpdatedFilePaths($updateItemRequest, $item),
+            'cats' => $this->getUpdatedCategories($updateItemRequest, $item)
         ]);
 
         return redirect()
@@ -122,6 +143,26 @@ class ItemController extends Controller
         }
 
         return $files;
+    }
+
+    public function getUpdatedCategories(UpdateItemRequest $request, Item $item)
+    {
+        $cats = $item->cats;
+
+        $availableCats = explode(",", $cats);
+
+        foreach (explode(",", $request->input('cats')) as $value) {
+            try {
+                if(!in_array($value, $availableCats)) {
+                    Category::findBySlug($value);
+                    $cats .= ',' . $value . ',';
+                }
+            } catch (ModelNotFoundException $e){
+                //Whoosh
+            }
+        }
+
+        return preg_replace('/,{0,}$/', '', $cats);
     }
 
     public function destroy(Item $item)

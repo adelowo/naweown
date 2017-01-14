@@ -2,6 +2,7 @@
 
 namespace Tests\Functional;
 
+use Naweown\Category;
 use Naweown\Item;
 use Naweown\User;
 use Tests\TestCase;
@@ -14,6 +15,15 @@ class ItemControllerTest extends TestCase
 
     use DatabaseMigrations;
 
+    public function setUp()
+    {
+        parent::setUp();
+        Category::create([
+            'title' => "The dark path",
+            'slug' => "dark-force",
+            'description' => "Join Darth Sidious on his mission to destroy all Jedis"
+        ]);
+    }
 
     public function testPageIsUpAndRunning()
     {
@@ -35,6 +45,7 @@ class ItemControllerTest extends TestCase
         $validData = [
             'title' => "Some cool title",
             'description' => "THe return of the Jedi",
+            'cats' => 'dark-force',
             'slug' => 'oops-oops'
         ];
 
@@ -142,7 +153,38 @@ class ItemControllerTest extends TestCase
         $this->assertRedirectedTo("items/{$item->id}");
         $this->assertResponseStatus(302);
 
-        $this->seeInDatabase('items', ['title' => $this->getValidData()['title']]);
+
+        $this->seeInDatabase(
+            'items',
+            [
+                'title' => $this->getValidData()['title'],
+                'cats' => 'uncategorized,dark-force'
+            ]
+        );
+
         $this->dontSeeInDatabase('items', ['title' => $item->title]);
+    }
+
+    public function testItemsCanBeCreatedWithCategories()
+    {
+
+        $user = $this->modelFactoryFor(User::class);
+
+        $user->activateAccount();
+
+        $this->be($user);
+
+        $this->post("items", $this->getValidData());
+
+        $this->assertRedirectedTo("items/1");
+        $this->assertResponseStatus(302);
+
+        $this->seeInDatabase(
+            'items',
+            [
+                'title' => $this->getValidData()['title'],
+                'cats' => 'dark-force'
+            ]
+        );
     }
 }

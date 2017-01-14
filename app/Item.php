@@ -11,7 +11,8 @@ class Item extends Model
         'title',
         'slug',
         'images',
-        'description'
+        'description',
+        'cats'
     ];
 
     protected $casts = [
