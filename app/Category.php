@@ -2,6 +2,7 @@
 
 namespace Naweown;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
@@ -11,8 +12,10 @@ class Category extends Model
         'description',
         'slug'
     ];
-
-    protected $casts = [
-      'number_of_views' => 'int'
-    ];
+    
+    public function scopeFindBySlug(Builder $builder, string $cat)
+    {
+        return $builder->where('slug', $cat)
+            ->firstOrFail();
+    }
 }
