@@ -18,21 +18,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         parent::boot();
 
-        Route::bind("token", function (string $token) {
-            return Token::findByToken($token);
-        });
-
-        Route::bind("id", function (int $id) {
-            return Item::findOrFail($id);
-        });
-
-        Route::bind("category", function(string $cat){
-           return Category::whereSlug($cat)->firstOrFail();
-        });
-
-        Route::bind("moniker", function (string $moniker) {
-           return User::findByMoniker($moniker);
-        });
+        $this->bindModels();
     }
 
     public function map()
@@ -47,6 +33,25 @@ class RouteServiceProvider extends ServiceProvider
             'namespace' => $this->namespace,
         ], function ($router) {
             require base_path('routes/web.php');
+        });
+    }
+
+    protected function bindModels()
+    {
+        Route::bind("token", function (string $token) {
+            return Token::findByToken($token);
+        });
+
+        Route::bind("id", function (int $id) {
+            return Item::findOrFail($id);
+        });
+
+        Route::bind("category", function (string $cat) {
+            return Category::whereSlug($cat)->firstOrFail();
+        });
+
+        Route::bind("moniker", function (string $moniker) {
+            return User::findByMoniker($moniker);
         });
     }
 }

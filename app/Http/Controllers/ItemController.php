@@ -85,7 +85,7 @@ class ItemController extends Controller
             try {
                 //If the category exists, make use of it. Else discard it.
                 Category::findBySlug($cat);
-                $cats .= ','.$cat.',';
+                $cats .= ',' . $cat . ',';
             } catch (ModelNotFoundException $e) {
                 //Whoosh
             }
@@ -153,11 +153,11 @@ class ItemController extends Controller
 
         foreach (explode(",", $request->input('cats')) as $value) {
             try {
-                if(!in_array($value, $availableCats)) {
+                if (!in_array($value, $availableCats)) {
                     Category::findBySlug($value);
                     $cats .= ',' . $value . ',';
                 }
-            } catch (ModelNotFoundException $e){
+            } catch (ModelNotFoundException $e) {
                 //Whoosh
             }
         }
