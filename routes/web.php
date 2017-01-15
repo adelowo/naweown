@@ -28,14 +28,17 @@ $router->get('account/activate/{token}', 'Auth\AccountActivationController@activ
 $router->get("logout", 'Auth\LoginController@logout')
     ->name("logout");
 
-$router->get('profile', function (\Illuminate\Http\Request $request) {
-    var_dump($request->user());
-})->name('dashboard');
+$router->get('@{moniker}', 'UserController@show')
+    ->name('users.profile');
+
+$router->get('users', 'UserController@index')
+    ->name('users.all');
 
 $router->resource('items', 'ItemController');
 
 $router->resource('category', 'CategoryController', ['only' => ['index', 'show']]);
 
-$router->get('tags', 'TagController@index');
+$router->get('tags', 'TagController@index', ['only' => ['index', 'show']]);
+
 
 

@@ -7,6 +7,7 @@ use Naweown\Item;
 use Naweown\Token;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Naweown\User;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -27,6 +28,10 @@ class RouteServiceProvider extends ServiceProvider
 
         Route::bind("category", function(string $cat){
            return Category::whereSlug($cat)->firstOrFail();
+        });
+
+        Route::bind("moniker", function (string $moniker) {
+           return User::findByMoniker($moniker);
         });
     }
 

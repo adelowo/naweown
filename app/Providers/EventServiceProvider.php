@@ -9,6 +9,7 @@ use Naweown\Events\AccountActivationLinkWasRequested;
 use Naweown\Events\AuthenticationLinkWasRequested;
 use Naweown\Events\CategoryWasViewed;
 use Naweown\Events\ItemWasViewed;
+use Naweown\Events\UserProfileWasViewed;
 use Naweown\Events\UserWasCreated;
 use Naweown\Listeners\IncrementCategoryViewCount;
 use Naweown\Listeners\IncrementItemViewCount;
@@ -30,6 +31,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         CategoryWasViewed::class => [
             IncrementCategoryViewCount::class
+        ],
+        UserProfileWasViewed::class => [
+
         ]
     ];
 
