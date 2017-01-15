@@ -1,7 +1,7 @@
 {
-  "name": "adelowo/Naweown",
+  "name": "adelowo/naweown",
   "description": "POC",
-  "license": "proprietary",
+  "license": "MIT",
   "type": "project",
   "require": {
     "php": ">=7.0",
