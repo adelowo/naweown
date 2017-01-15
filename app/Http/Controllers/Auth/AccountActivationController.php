@@ -12,7 +12,7 @@ class AccountActivationController extends Controller
 
     public function activate(Token $token)
     {
-        $redirectRoute = route("dashboard");
+        $redirectRoute = route("users.profile", $token->user->moniker);
 
         if ($token->isExpired()) {
             $token->delete();

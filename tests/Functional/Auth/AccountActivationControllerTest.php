@@ -32,7 +32,7 @@ class AccountActivationControllerTest extends TestCase
 
         $this->assertSessionHas('token.expired');
 
-        $this->assertRedirectedToRoute('dashboard');
+        $this->assertRedirectedToRoute('users.profile', $user->moniker);
     }
 
     public function testExpiredTokensAreAutoDeletedWhenUsed()
@@ -60,7 +60,7 @@ class AccountActivationControllerTest extends TestCase
         $this->dontSeeInDatabase('tokens', ['user_id' => 1]);
         $this->assertSessionMissing('token.expired');
         $this->assertSessionHas('account.activated');
-        $this->assertRedirectedToRoute('dashboard');
+        $this->assertRedirectedToRoute('users.profile', $user->moniker);
     }
 
     public function testAnAccountWasSuccessfullyActivatedEvenIfTheUserIsNotLoggedIn()
@@ -72,7 +72,7 @@ class AccountActivationControllerTest extends TestCase
         $this->dontSeeInDatabase('tokens', ['user_id' => 1]);
         $this->assertSessionMissing('token.expired');
         $this->assertSessionHas('account.activated');
-        $this->assertRedirectedToRoute('dashboard');
+        $this->assertRedirectedToRoute('users.profile', $user->moniker);
     }
 
     public function testOnlyUnActivatedAccountsCanBeActivated()
