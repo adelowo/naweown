@@ -41,7 +41,9 @@ class User extends Authenticatable
     {
         $this->token()->delete();
 
-        return $this->update(['is_email_validated' => self::EMAIL_VALIDATED]);
+        return $this->update(
+            ['is_email_validated' => self::EMAIL_VALIDATED]
+        );
     }
 
     public function token()
@@ -54,13 +56,27 @@ class User extends Authenticatable
         return $this->hasMany(Item::class);
     }
 
-    public function scopefindByEmailAddress(Builder $builder, string $emailAddress)
-    {
-        return $builder->where('email', $emailAddress)->firstOrFail();
+    public function scopefindByEmailAddress(
+        Builder $builder,
+        string $emailAddress
+    ) {
+        return $builder->where('email', $emailAddress)
+            ->firstOrFail();
     }
 
     public function isAccountActivated()
     {
-        return (int)$this->getAttribute('is_email_validated') === self::EMAIL_VALIDATED;
+        return
+            (int)$this->getAttribute('is_email_validated')
+            ===
+            self::EMAIL_VALIDATED;
+    }
+
+    public function scopeFindByMoniker(
+        Builder $builder,
+        string $moniker
+    ) {
+        return $builder->where('moniker', $moniker)
+            ->firstOrFail();
     }
 }

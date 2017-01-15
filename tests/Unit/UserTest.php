@@ -45,4 +45,20 @@ class UserTest extends TestCase
 
         $this->assertFalse($createdUser->isAccountActivated());
     }
+
+    public function testFindUserByMoniker()
+    {
+        $createdUser = $this->modelFactoryFor(User::class);
+
+        $user = User::findByMoniker($createdUser->moniker);
+
+        $this->assertSame($createdUser->email, $user->email);
+    }
+
+    public function testCannotFindUserByAGivenMoniker()
+    {
+        $this->expectException(ModelNotFoundException::class);
+
+        User::findByMoniker("dream-moniker");
+    }
 }
