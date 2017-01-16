@@ -3,6 +3,7 @@
 namespace Naweown\Http\Controllers;
 
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Naweown\Events\UserProfileWasViewed;
 use Naweown\User;
@@ -56,7 +57,52 @@ class UserController extends Controller
         );
     }
 
-    public function relationAction(User $user, string $action)
+    public function relationAction(
+        Request $request,
+        User $user,
+        string $action
+    ) {
+
+        $message = $action.'User';
+
+        return $this->$message($request, $user);
+    }
+
+    protected function followUser(Request $request, User $user)
+    {
+
+        $authenticatedUser = $request->user();
+
+        $isAFollower = $user->followers()
+            ->where("follower_id", $authenticatedUser->id)
+            ->first();
+
+        if ($isAFollower === null) {
+
+            $authenticatedUser->follows()
+                ->create([
+                    'follower_id' => $authenticatedUser->id,
+                    'user_id' => $user->id
+                ]);
+
+            if ($request->isJson()) {
+                return [
+                    'user.followed' => true
+                ];
+            }
+
+            return redirect("@{$user->moniker}")
+                ->with('user.followed', true);
+        }
+
+        return back()
+            ->with(
+                'user.relationship.failed',
+                'Cannot follow the user as you are already following'
+            );
+    }
+
+    protected function unfollowUser(Request $request, User $user)
     {
 
     }

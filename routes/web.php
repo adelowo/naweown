@@ -37,7 +37,8 @@ $router->get('@{moniker}/{relationship}', 'UserController@relation')
 
 $router->post('@{moniker}/{relationship_action}', 'UserController@relationAction')
     ->where('relationship_action', '(follow|unfollow)')
-    ->name('users.profile.relationship.action');
+    ->name('users.profile.relationship.action')
+    ->middleware('auth');
 
 $router->get('users', 'UserController@index')
     ->name('users.all');
