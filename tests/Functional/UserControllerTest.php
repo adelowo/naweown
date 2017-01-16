@@ -108,4 +108,34 @@ class UserControllerTest extends TestCase
         $this->post("@$firstUser->moniker/unfollow");
         $this->assertRedirectedToRoute('login');
     }
+
+    public function testCannotUnfollowAUserThatIsntFollowed()
+    {
+        list($firstUser, $secondUser) = $this->setUpUsers();
+
+        $route = "@{$firstUser->moniker}/unfollow";
+
+        $this->get("@{$firstUser->moniker}"); //Visit some dummy route first.
+
+        $this->post($route);
+
+        $this->assertRedirectedTo("@{$firstUser->moniker}");
+        $this->assertSessionHas('user.relationship.failed');
+    }
+
+    public function testCanUnfollowAUser()
+    {
+        list($firstUser, $secondUser) = $this->setUpUsers();
+
+        //follow the user
+        $this->post("@{$firstUser->moniker}/follow");
+
+        //Then unfollow him again.. I like trolls though
+        $this->post("@{$firstUser->moniker}/unfollow");
+
+        $result = $this->dontSeeInDatabase('followers',
+            ['user_id' => $firstUser->id, 'follower_id' => $secondUser->id]);
+
+        $this->assertSessionHas('user.unfollowed');
+    }
 }

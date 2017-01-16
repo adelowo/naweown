@@ -63,7 +63,7 @@ class UserController extends Controller
         string $action
     ) {
 
-        $message = $action.'User';
+        $message = $action . 'User';
 
         return $this->$message($request, $user);
     }
@@ -104,6 +104,29 @@ class UserController extends Controller
 
     protected function unfollowUser(Request $request, User $user)
     {
+        $authenticatedUser = $request->user();
 
+        $isAFollower = $user->followers()
+            ->where("follower_id", $authenticatedUser->id)
+            ->first();
+
+        if ($isAFollower === null) {
+            return back()
+                ->with(
+                    'user.relationship.failed',
+                    'You cannot unfollow a user you aren\'t following'
+                );
+        }
+
+        $user->followers()->delete($authenticatedUser->id);
+
+        if ($request->isJson()) {
+            return [
+                'user.unfollowed' => true
+            ];
+        }
+
+        return redirect("@{$user->moniker}")
+            ->with('user.unfollowed', true);
     }
 }
