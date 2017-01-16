@@ -38,7 +38,6 @@ $router->resource('items', 'ItemController');
 
 $router->resource('category', 'CategoryController', ['only' => ['index', 'show']]);
 
-$router->get('tags', 'TagController@index', ['only' => ['index', 'show']]);
 
 
 

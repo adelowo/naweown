@@ -15,7 +15,7 @@ class UserController extends Controller
         return view(
             'users.all',
             [
-                'users' => User::all()
+                'users' => User::paginate(50)
             ]
         );
     }
