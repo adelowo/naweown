@@ -42,4 +42,22 @@ class UserController extends Controller
             ]
         );
     }
+
+    public function relation(
+        User $user,
+        string $relationType
+    ) {
+
+        return view(
+            "users.relationship",
+            [
+                'users' => $user->$relationType()
+            ]
+        );
+    }
+
+    public function relationAction(User $user, string $action)
+    {
+
+    }
 }

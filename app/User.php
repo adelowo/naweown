@@ -79,4 +79,14 @@ class User extends Authenticatable
         return $builder->where('moniker', $moniker)
             ->firstOrFail();
     }
+
+    public function followers()
+    {
+        return $this->hasMany(Follower::class);
+    }
+
+    public function follows()
+    {
+        return $this->hasMany(Follower::class, 'follower_id') ;
+    }
 }

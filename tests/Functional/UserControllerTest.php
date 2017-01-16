@@ -33,4 +33,20 @@ class UserControllerTest extends TestCase
         $this->get('@unexistent');
         $this->assertResponseStatus(404);
     }
+
+    public function testCanViewAUserRelationshipWithOtherUsers()
+    {
+        $user = $this->modelFactoryFor(User::class);
+
+        $route = "@{$user->moniker}";
+
+        $this->get($route.'/followers');
+        $this->assertResponseOk();
+
+        $this->get($route.'/follows');
+        $this->assertResponseOk();
+
+        $this->get("$route/followerss");
+        $this->assertResponseStatus(404);
+    }
 }
