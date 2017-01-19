@@ -31,11 +31,11 @@ $router->get("logout", 'Auth\LoginController@logout')
 $router->get('@{moniker}', 'UserController@show')
     ->name('users.profile');
 
-$router->get('@{moniker}/{relationship}', 'UserController@relation')
+$router->get('@{moniker}/{relationship}', 'UserRelationshipController@relation')
     ->where('relationship', '(followers|follows)')
     ->name('users.profile.relationship');
 
-$router->post('@{moniker}/{relationship_action}', 'UserController@relationAction')
+$router->post('@{moniker}/{relationship_action}', 'UserRelationshipController@relationAction')
     ->where('relationship_action', '(follow|unfollow)')
     ->name('users.profile.relationship.action')
     ->middleware('auth');
@@ -46,7 +46,3 @@ $router->get('users', 'UserController@index')
 $router->resource('items', 'ItemController');
 
 $router->resource('category', 'CategoryController', ['only' => ['index', 'show']]);
-
-
-
-
