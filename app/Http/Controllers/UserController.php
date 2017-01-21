@@ -3,8 +3,8 @@
 namespace Naweown\Http\Controllers;
 
 use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Naweown\Events\UserAccountWasDeleted;
 use Naweown\Events\UserProfileWasViewed;
 use Naweown\User;
 
@@ -42,5 +42,16 @@ class UserController extends Controller
                 'isOwner' => $isOwner
             ]
         );
+    }
+
+    public function destroy(
+        User $user,
+        Dispatcher $dispatcher
+    ) {
+        $user->delete();
+
+        $dispatcher->fire(new UserAccountWasDeleted($user));
+
+        return redirect('logout');
     }
 }

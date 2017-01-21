@@ -31,6 +31,9 @@ $router->get("logout", 'Auth\LoginController@logout')
 $router->get('@{moniker}', 'UserController@show')
     ->name('users.profile');
 
+$router->delete('@{moniker}', 'UserController@destroy')
+    ->name('users.delete');
+
 $router->get('@{moniker}/{relationship}', 'UserRelationshipController@relation')
     ->where('relationship', '(followers|follows)')
     ->name('users.profile.relationship');

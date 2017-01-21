@@ -9,6 +9,7 @@ use Naweown\Events\AccountActivationLinkWasRequested;
 use Naweown\Events\AuthenticationLinkWasRequested;
 use Naweown\Events\CategoryWasViewed;
 use Naweown\Events\ItemWasViewed;
+use Naweown\Events\UserAccountWasDeleted;
 use Naweown\Events\UserProfileWasViewed;
 use Naweown\Events\UserWasCreated;
 use Naweown\Listeners\IncrementCategoryViewCount;
@@ -33,6 +34,9 @@ class EventServiceProvider extends ServiceProvider
             IncrementCategoryViewCount::class
         ],
         UserProfileWasViewed::class => [
+
+        ],
+        UserAccountWasDeleted::class => [
 
         ]
     ];
