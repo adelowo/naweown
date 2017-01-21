@@ -11,6 +11,18 @@ use Naweown\User;
 class UserController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware(function (Request $request, \Closure $next) {
+
+            $moniker = str_replace_first("@","",$request->segment(1));
+
+            abort_if($request->user()->moniker !== $moniker, 404);
+
+            return $next($request);
+        }, ['only' => 'destroy']);
+    }
+
     public function index()
     {
         return view(

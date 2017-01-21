@@ -56,5 +56,29 @@ class UserControllerTest extends TestCase
         $this->delete("$moniker");
 
         $this->assertRedirectedToRoute('logout');
+
+        $this->dontSeeInDatabase('users', ['id' => $createdUser->id]);
+    }
+
+    public function testAUserCannotDeleteAnotherUserAccount()
+    {
+        $createdUser = $this->modelFactoryFor(User::class);
+
+        $troll = $this->modelFactoryFor(User::class);
+
+        $this->be($troll);
+
+        $this->expectsEvents(UserProfileWasViewed::class);
+
+        $moniker = "@{$createdUser->moniker}";
+
+        $this->get($moniker);
+        $this->assertResponseOk();
+
+        $this->delete("$moniker");
+
+        $this->assertResponseStatus(404);
+
+        $this->seeInDatabase('users', ['id' => $createdUser->id]);
     }
 }
