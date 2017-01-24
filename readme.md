@@ -6,13 +6,21 @@ Some sample Laravel app built with TDD in mind......
 
 The app is going to be a sort of a listing app. Think of it as a listing app for some handmade crafts.
 
-- Users can login/register (password-less login). 
-- Users can post items of stuff. 
-- Users can delete stuffs. See 2. 
-- Users can follow other users. 
-- Users have a profile page. 
-- Users can unfollow other users
-
+- [x] Users can login/register (password-less login).
+- [x] Users can post items of stuff. 
+- [x] Users can delete stuffs. See 2. 
+- [x] Users can follow other users. 
+- [x] Users have a profile page. 
+- [x] Users can unfollow other users.
+- [x] Users can delete their accounts.
+- [x] Users can update their account details.
+- [] Social login. This is to complement the magic link.
+  - [] Facebook
+  - [] Google
+- [] API
+  - [] Users' profile can be fetched
+  - [] User's items can be fetched.
+  - [] User's followers and those the user follows can be fetched.
 
 ### Hey Yo, where is the (G)UI ? 
 There currently isn't no GUI and ___i don't think there'd be one in the future___. I am just taking TDD for a test drive.
