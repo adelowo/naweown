@@ -34,6 +34,14 @@ $router->get('@{moniker}', 'UserController@show')
 $router->delete('@{moniker}', 'UserController@destroy')
     ->name('users.delete');
 
+$router->get('@{moniker}/edit', 'UserController@edit')
+    ->name('users.edit')
+    ->middleware('profile_owner');
+
+$router->put('@{moniker}', 'UserController@update')
+    ->name('users.update')
+    ->middleware('profile_owner');
+
 $router->get('@{moniker}/{relationship}', 'UserRelationshipController@relation')
     ->where('relationship', '(followers|follows)')
     ->name('users.profile.relationship');
