@@ -2,7 +2,7 @@
 
 namespace Naweown\Services;
 
-class TokenGenerator implements TokenGeneratorInterface
+class MagicLinkTokenGenerator implements TokenGeneratorInterface
 {
 
     public function generate()
