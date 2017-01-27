@@ -2,10 +2,10 @@
 
 namespace Tests\Unit;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Naweown\User;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class UserTest extends TestCase
 {
@@ -60,5 +60,37 @@ class UserTest extends TestCase
         $this->expectException(ModelNotFoundException::class);
 
         User::findByMoniker("dream-moniker");
+    }
+
+    public function testHasApiTokenIsInTheNegative()
+    {
+        $createdUser = $this->modelFactoryFor(User::class);
+
+        $this->assertFalse(
+            User::findByMoniker($createdUser->moniker)
+                ->hasApiToken()
+        );
+    }
+
+    public function testCanFindAUserByAnApiToken()
+    {
+        $createdUser = $this->modelFactoryFor(User::class);
+
+        $token = $this->app['token.generator.api']->generate();
+
+        $createdUser->api_token = $token;
+        $createdUser->save();
+
+        $dbUser = User::findByApiToken($token);
+
+        $this->assertEquals(
+            $createdUser->id,
+            $dbUser->id
+        );
+
+        $this->assertEquals(
+            $createdUser->token,
+            $dbUser->token
+        );
     }
 }

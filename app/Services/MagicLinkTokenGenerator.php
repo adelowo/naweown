@@ -2,11 +2,33 @@
 
 namespace Naweown\Services;
 
+use Naweown\Token;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 class MagicLinkTokenGenerator implements TokenGeneratorInterface
 {
 
     public function generate()
     {
-        return str_random();
+        $length = [4, 8, 16, 32];
+
+        $token = str_random($length[array_rand($length)]);
+
+        if ($this->isTokenAlreadyInUse($token)) {
+            return $this->generate();
+        }
+
+        return $token;
+    }
+
+    protected function isTokenAlreadyInUse(string $token)
+    {
+        try {
+            Token::findByToken($token);
+
+            return true;
+        } catch (ModelNotFoundException $e) {
+            return false;
+        }
     }
 }
