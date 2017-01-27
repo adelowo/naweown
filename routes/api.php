@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
 
 /*
@@ -18,10 +17,18 @@ use Illuminate\Routing\Router;
  * @var \Illuminate\Routing\Router $router
  */
 
-$router->group(["middleware" => "auth:api"], function (Router $router) {
+//Bite me.
+$router->group(['prefix' => 'v1'], function (Router $router) {
 
-    $router->get('/user', function (Request $request) {
-        return $request->user();
-    });
+    $router->get('users', 'Api\One\UserController@index')
+        ->name('api.users');
+
+    $router->get('users/@{moniker}', 'Api\One\UserController@profile')
+        ->name('api.users.profile');
+
+    $router->get('users/@{moniker}/items', 'Api\One\UserController@items')
+        ->name('api.users.profile');
+
+    $router->resource('items', 'Api\One\ItemController', ['only' => ['index', 'show']]);
 
 });

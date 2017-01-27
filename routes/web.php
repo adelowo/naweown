@@ -51,6 +51,10 @@ $router->post('@{moniker}/{relationship_action}', 'UserRelationshipController@re
     ->name('users.profile.relationship.action')
     ->middleware('auth');
 
+$router->match(['POST', 'PUT'], '@{moniker}/token', 'ApiTokenController@token')
+    ->name('users.api.token.create')
+    ->middleware('auth');
+
 $router->get('users', 'UserController@index')
     ->name('users.all');
 

@@ -23,10 +23,11 @@ class RouteServiceProvider extends ServiceProvider
 
     public function map()
     {
-        $this->mapRoutes();
+        $this->mapWebRoutes();
+        $this->mapApiRoutes();
     }
 
-    protected function mapRoutes()
+    protected function mapWebRoutes()
     {
         Route::group([
             'middleware' => 'web',
@@ -36,7 +37,19 @@ class RouteServiceProvider extends ServiceProvider
         });
     }
 
-    protected function bindModels()
+    protected function mapApiRoutes()
+    {
+        Route::group([
+            'middleware' => 'auth:api',
+            'namespace' => $this->namespace,
+            'prefix' => 'api',
+        ], function ($router) {
+             require base_path('routes/api.php');
+         });
+    }
+
+
+protected function bindModels()
     {
         Route::bind("token", function (string $token) {
             return Token::findByToken($token);

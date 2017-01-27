@@ -20,4 +20,8 @@ class Item extends Model
         'user_id' => 'int',
         'number_of_views' => 'int'
     ];
+
+    protected $hidden = [
+      'number_of_views'
+    ];
 }

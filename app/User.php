@@ -3,8 +3,8 @@
 namespace Naweown;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
@@ -35,6 +35,8 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'api_token',
+        'is_email_validated'
     ];
 
     public function activateAccount()
@@ -87,11 +89,25 @@ class User extends Authenticatable
 
     public function follows()
     {
-        return $this->hasMany(Follower::class, 'follower_id') ;
+        return $this->hasMany(Follower::class, 'follower_id');
     }
 
     public function updateProfile(array $values)
     {
         return $this->update($values);
+    }
+
+    public function hasApiToken()
+    {
+        return $this->getAttribute('api_token') !== null;
+    }
+
+    public function scopeFindByApiToken(
+        Builder $builder,
+        string $apiToken
+    )
+    {
+        return $builder->where('api_token', $apiToken)
+            ->firstOrFail();
     }
 }
