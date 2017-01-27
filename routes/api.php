@@ -29,6 +29,7 @@ $router->group(['prefix' => 'v1'], function (Router $router) {
     $router->get('users/@{moniker}/items', 'Api\One\UserController@items')
         ->name('api.users.profile');
 
-    $router->resource('items', 'Api\One\ItemController', ['only' => ['index', 'show']]);
+    $router->get('items', 'Api\One\ItemController@index');
+    $router->get('items/{id}', 'Api\One\ItemController@show');
 
 });
