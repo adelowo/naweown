@@ -18,9 +18,10 @@ The app is going to be a sort of a listing app. Think of it as a listing app for
   - [] Facebook
   - [] Google
 - [] API
-  - [] Users' profile can be fetched
-  - [] User's items can be fetched.
-  - [] User's followers and those the user follows can be fetched.
+  - [x] Users' profile can be fetched.
+  - [x] User's items can be fetched.
+  - [x] All items can ve fetched.
+  - [x] All users can be fetched.
 
 ### Hey Yo, where is the (G)UI ? 
 There currently isn't no GUI and ___i don't think there'd be one in the future___. I am just taking TDD for a test drive.
