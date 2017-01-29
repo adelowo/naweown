@@ -24,7 +24,8 @@ class User extends Authenticatable
         'email',
         'moniker',
         'bio',
-        'is_email_validated'
+        'is_email_validated',
+        'api_token'
     ];
 
     /**
@@ -109,5 +110,22 @@ class User extends Authenticatable
     {
         return $builder->where('api_token', $apiToken)
             ->firstOrFail();
+    }
+
+    public function createToken(string $token)
+    {
+        return $this->saveApiToken($token);
+    }
+
+    public function updateToken(string $token)
+    {
+        //Does the same thing as `createToken` but allows for a more expressive API
+        return $this->saveApiToken($token);
+    }
+
+    protected function saveApiToken(string $token)
+    {
+        return $this->fill(['api_token' => $token])
+            ->save();
     }
 }
