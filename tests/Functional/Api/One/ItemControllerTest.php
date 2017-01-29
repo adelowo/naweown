@@ -55,4 +55,25 @@ class ItemControllerTest extends TestCase
                 )
             );
     }
+
+    public function testASingleItemCanBeRequestedFromTheApi()
+    {
+        $user = $this->getUserWithApiToken();
+
+        $this->createItems($user);
+
+        $this->get("api/v1/items/1?api_token={$user->api_token}");
+
+        $this->assertResponseOk();
+        $this->seeJsonStructure([
+            'id',
+            'title',
+            'slug',
+            'images',
+            'description',
+            'created_at',
+            'updated_at',
+            'cats'
+        ]);
+    }
 }
