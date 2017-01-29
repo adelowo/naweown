@@ -14,13 +14,13 @@ The app is going to be a sort of a listing app. Think of it as a listing app for
 - [x] Users can unfollow other users.
 - [x] Users can delete their accounts.
 - [x] Users can update their account details.
-- [] Social login. This is to complement the magic link.
-  - [] Facebook
-  - [] Google
-- [] API
+- [-] Social login. This is to complement the magic link.
+  - [-] Facebook
+  - [-] Google
+- [x] API
   - [x] Users' profile can be fetched.
   - [x] User's items can be fetched.
-  - [x] All items can ve fetched.
+  - [x] All items can be fetched.
   - [x] All users can be fetched.
 
 ### Hey Yo, where is the (G)UI ? 
