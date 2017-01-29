@@ -12,14 +12,14 @@ class ApiTokenGenerator implements TokenGeneratorInterface
     {
         $token = bin2hex(random_bytes(8));
 
-        if ($this->isTokenAlreadyOwned($token)) {
+        if ($this->isTokenAlreadyInUse($token)) {
             return $this->generate();
         }
 
         return $token;
     }
 
-    protected function isTokenAlreadyOwned(string $token)
+    public function isTokenAlreadyInUse(string $token)
     {
         try {
 

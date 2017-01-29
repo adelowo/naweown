@@ -21,7 +21,7 @@ class MagicLinkTokenGenerator implements TokenGeneratorInterface
         return $token;
     }
 
-    protected function isTokenAlreadyInUse(string $token)
+    public function isTokenAlreadyInUse(string $token)
     {
         try {
             Token::findByToken($token);
