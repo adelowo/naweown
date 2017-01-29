@@ -22,6 +22,7 @@ class Item extends Model
     ];
 
     protected $hidden = [
-      'number_of_views'
+        'number_of_views',
+        'user_id'
     ];
 }
